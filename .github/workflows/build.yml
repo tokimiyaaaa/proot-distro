@@ -50,7 +50,9 @@ jobs:
           # Remove distro plugins to filter and upload built distributions and its plugins later on
           rm -rf ./distro-plugins/*
       - name: Install Needed Dependencies
-        run: sudo apt-get install curl jq mmdebstrap qemu-user-static binfmt-support -yq
+        run: |
+          sudo apt-get update
+          sudo apt-get install curl jq mmdebstrap qemu-user-static binfmt-support -yq
       - name: Build distribution rootfs
         run: |
           for distros_to_be_built in $(cat ./distributions.txt); do
@@ -68,18 +70,6 @@ jobs:
           name: built-rootfs-aarch64
           path: rootfs/*aarch64*.tar.xz
           if-no-files-found: ignore
-      - name: Upload Artifacts (arm)
-        uses: actions/upload-artifact@v3
-        with:
-          name: built-rootfs-arm
-          path: rootfs/*arm*.tar.xz
-          if-no-files-found: ignore
-      - name: Upload Artifacts (i686)
-        uses: actions/upload-artifact@v3
-        with:
-          name: built-rootfs-i686
-          path: rootfs/*i686*.tar.xz
-          if-no-files-found: ignore
       - name: Upload Artifacts (x86_64)
         uses: actions/upload-artifact@v3
         with:
@@ -92,3 +82,7 @@ jobs:
         with:
           name: distro-plugins
           path: distro-plugins/*.sh
+      - name: Upload to release
+        run: gh release create $CURRENT_VERSION rootfs/*.tar.xz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

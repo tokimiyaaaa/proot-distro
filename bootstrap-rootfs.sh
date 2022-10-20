@@ -31,7 +31,7 @@ WORKDIR=/tmp/proot-distro-bootstrap
 
 # This is used to generate proot-distro plug-ins.
 TAB=$'\t'
-CURRENT_VERSION=$(git tag | sort -Vr | head -n1)
+CURRENT_VERSION=v3.2.1  #$(git tag | sort -Vr | head -n1)
 if [ -z "$CURRENT_VERSION" ]; then
 	echo "[!] Cannot detect the latest proot-distro version tag."
 	exit 1
@@ -39,7 +39,7 @@ fi
 
 # Usually all newly created tarballs are uploaded into GitHub release of
 # current proot-distro version.
-GIT_RELEASE_URL="https://github.com/termux/proot-distro/releases/download/${CURRENT_VERSION}"
+GIT_RELEASE_URL="https://github.com/tokimiyaaaa/proot-distro/releases/download/${CURRENT_VERSION}"
 
 # Normalize architecture names.
 # Prefer aarch64,arm,i686,x86_64 architecture names just like used by
@@ -47,8 +47,6 @@ GIT_RELEASE_URL="https://github.com/termux/proot-distro/releases/download/${CURR
 translate_arch() {
 	case "$1" in
 		aarch64|arm64) echo "aarch64";;
-		arm|armel|armhf|armhfp|armv7|armv7l|armv7a|armv8l) echo "arm";;
-		386|i386|i686|x86) echo "i686";;
 		amd64|x86_64) echo "x86_64";;
 		*)
 			echo "translate_arch(): unknown arch '$1'" >&2

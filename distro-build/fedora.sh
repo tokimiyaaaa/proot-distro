@@ -1,11 +1,11 @@
 dist_name="Fedora"
-dist_version="35-1.2"
+dist_version="36-1.5"
 
 bootstrap_distribution() {
-	for arch in aarch64 armhfp x86_64; do
+	for arch in aarch64 x86_64; do
 		curl --fail --location \
 			--output "${WORKDIR}/fedora-${dist_version}-${arch}.tar.xz" \
-			"https://mirror.de.leaseweb.net/fedora/linux/releases/${dist_version:0:2}/Container/${arch}/images/Fedora-Container-Base-${dist_version}.${arch}.tar.xz"
+			"https://dl.fedoraproject.org/pub/fedora/linux/releases/${dist_version:0:2}/Container/${arch}/images/Fedora-Container-Base-${dist_version}.${arch}.tar.xz"
 
 		mkdir "${WORKDIR}/fedora-$(translate_arch "$arch")"
 		sudo tar -Jx --strip-components=1 \
@@ -21,8 +21,8 @@ bootstrap_distribution() {
 		mount --bind /dev "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")/dev"
 		mount --bind /proc "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")/proc"
 		mount --bind /sys "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")/sys"
-		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" yum upgrade -y
-		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" yum install -y util-linux
+		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" dnf upgrade -y
+		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" dnf install -y util-linux
 		EOF
 
 		sudo tar -Jcf "${ROOTFS_DIR}/fedora-$(translate_arch "$arch")-pd-${CURRENT_VERSION}.tar.xz" \
@@ -34,7 +34,7 @@ bootstrap_distribution() {
 }
 
 write_plugin() {
-	cat <<- EOF > "${PLUGIN_DIR}/archlinux.sh"
+	cat <<- EOF > "${PLUGIN_DIR}/fedora.sh"
 	# This is a default distribution plug-in.
 	# Do not modify this file as your changes will be overwritten on next update.
 	# If you want customize installation, please make a copy.
