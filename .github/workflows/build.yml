@@ -83,6 +83,6 @@ jobs:
           name: distro-plugins
           path: distro-plugins/*.sh
       - name: Upload to release
-        run: gh release create $CURRENT_VERSION rootfs/*.tar.xz
+        run: gh release create v3.2.1-1 rootfs/*aarch64*.tar.xz rootfs/*x86_64*.tar.xz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
