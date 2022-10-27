@@ -22,7 +22,7 @@ bootstrap_distribution() {
 		mount --bind /proc "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")/proc"
 		mount --bind /sys "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")/sys"
 		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" dnf upgrade -y
-		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" dnf install -y passwd util-linux
+		chroot "${WORKDIR}/fedora-$(translate_arch "$arch")/fedora-$(translate_arch "$arch")" dnf install -y util-linux util-linux-user passwd man-db which
 		EOF
 
 		sudo tar -Jcf "${ROOTFS_DIR}/fedora-$(translate_arch "$arch")-pd-${CURRENT_VERSION}.tar.xz" \
